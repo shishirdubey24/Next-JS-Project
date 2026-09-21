@@ -1,6 +1,6 @@
-import { getBagItems } from "@/lib/data/cart";
+import { getBagItems } from "@/lib/data/cartData";
 import Image from "next/image";
-import DeleteCartButton from "../ui-cards/deleteCartButton";
+import RemoveFromCartButton from "../ui-cards/RemoveFromCartButton";
 const CartPage = async () => {
   const bagItems = await getBagItems();
   if (bagItems.length === 0) {
@@ -79,7 +79,7 @@ const CartPage = async () => {
                     Delivery by {item.delivery_date}{" "}
                   </p>{" "}
                 </div>{" "}
-                <DeleteCartButton productId={item.id} />
+                <RemoveFromCartButton productId={item.id} />
               </article>
             ))}{" "}
           </section>{" "}
