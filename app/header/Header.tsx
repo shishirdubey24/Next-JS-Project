@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { User, ShoppingBag } from "lucide-react";
-import { SubmitSearchBox } from "../components/submitSearchBox";
+import { SearchBox } from "./SearchBox";
 //import CartPage from "@/app/bag/page";
-import { getBagItemsCount } from "@/lib/data/cart";
+import { getBagItemsCount } from "@/lib/data/cartData";
 export const Header = async () => {
   const bagCount = await getBagItemsCount();
+
   const navItems = [
     "MEN",
     "WOMEN",
@@ -16,7 +17,7 @@ export const Header = async () => {
 
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50 border-b border-gray-200">
-      <div className="max-w-[1400px] mx-auto flex min-h-16 flex-wrap items-center gap-3 px-4 py-3 lg:h-20 lg:flex-nowrap lg:gap-10 lg:px-6 lg:py-0">
+      <div className="max-w-350 mx-auto flex min-h-16 flex-wrap items-center gap-3 px-4 py-3 lg:h-20 lg:flex-nowrap lg:gap-10 lg:px-6 lg:py-0">
         <Link
           href="/"
           className="shrink-0 hover:opacity-90 transition-opacity no-underline ml-0 lg:ml-2 xl:ml-4"
@@ -39,13 +40,13 @@ export const Header = async () => {
 
         <div className="order-3 basis-full lg:order-0 lg:flex-1 lg:min-w-0 lg:basis-auto">
           <div className="flex items-center bg-[#f5f5f6] border border-gray-300 rounded-md overflow-hidden">
-            <SubmitSearchBox />
+            <SearchBox />
           </div>
         </div>
 
         <div className="ml-auto flex items-center gap-4 sm:gap-6 lg:ml-0">
           <Link
-            href="/Account"
+            href="/profile"
             className="flex flex-col items-center text-black hover:text-gray-700 no-underline"
           >
             <User size={20} />

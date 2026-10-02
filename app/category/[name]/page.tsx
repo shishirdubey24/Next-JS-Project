@@ -1,6 +1,6 @@
 import ProductCard from "@/app/ui-cards/ProductCard";
-import { getProductsByCategory } from "@/lib/datafetch";
-import type { CategoryPageProps, Product } from "@/types/productsType";
+import { getProductsByCategory } from "@/lib/data/productData";
+import type { CategoryPageProps, Product } from "@/types/product";
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { name } = await params;
