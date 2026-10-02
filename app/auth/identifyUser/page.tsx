@@ -15,9 +15,9 @@ const IdentifyUser = () => {
       setResponseMessage(userResponse.message);
       setTimeout(() => {
         if (userResponse.exists == false) {
-          router.push("/sign-up");
+          router.push("/auth/sign-up");
         } else {
-          router.push("/sign-in");
+          router.push("/auth/sign-in");
         }
       }, 1000);
     } catch (error) {

@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
- import type { SignInData } from "@/types/auth";
+import type { SignInData } from "@/types/auth";
+//import { useRouter } from "next/navigation";
 import { LoginAction } from "@/lib/actions/authActions";
 import { useAuthStore } from "@/lib/store/useAuthStore";
-const SignInPage = ()=>{
+const SignInPage = () => {
+  // const router=useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,6 +28,7 @@ const SignInPage = ()=>{
         return;
       }
       setAuth({ name: response.name, email: response.email });
+      //  router.post('/')
     } catch {
       setError("Unable to sign in. Please try again.");
     } finally {
@@ -84,7 +87,11 @@ const SignInPage = ()=>{
             />
           </div>
 
-          {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+          {error && (
+            <p role="alert" className="text-sm text-red-600">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
