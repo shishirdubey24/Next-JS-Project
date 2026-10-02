@@ -24,6 +24,7 @@ await UserSession.updateOne(
 );
    const cookieStore=await cookies();
    cookieStore.delete("authToken");
+   cookieStore.delete("refreshToken");
 
    return{
     message:"user Logged OUT"

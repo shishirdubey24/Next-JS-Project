@@ -12,6 +12,7 @@ import { mongoDBConnect } from "@/lib/mongoDb";
 import { generateAuthToken } from "@/lib/auth/generateAuthToken";
 import { generateSessionId } from "@/lib/auth/generateSessionID";
 import UserSession from "@/models/sessionModel";
+import { generateRefreshToken, hashRefreshToken } from "../auth/generateRefreshToekn";
 export type RegisterActionResponse =
   | { success: true; name: string; email: string }
   | { success: false; message: string };
@@ -35,9 +36,15 @@ export const RegisterAction=async (data:SignUpData): Promise<RegisterActionRespo
    sameSite: "lax", 
    path: "/",
     maxAge: 2 * 24 * 60 * 60,
- }
-
- )
+ });
+ cookieStore.set("refreshToken",response.refreshToken,{
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 10 * 24 * 60 * 60,
+   });
+ 
  return {
   success: true,
   name:response.name,
@@ -62,15 +69,23 @@ export const LoginAction=async(data:SignInData):Promise<LoginDataResponse>=>{
       return { success: false, message: "Invalid email or password" };
     }
 
+// Create a new session for the user
     const sessionID = generateSessionId();
+    const refreshToken = generateRefreshToken();
+    const hashedToken = hashRefreshToken(refreshToken);
     await UserSession.create({
       sessionID,
       userID: user._id.toString(),
+      refreshToken: hashedToken,
       status: "active",
-      expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+      expiresAt: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
     });
+
+    //JWT token generation and setting it in cookies
     const token = await generateAuthToken({ userId: user._id.toString(), sessionID });
     const cookieStore = await cookies();
+
+  // Set the authToken cookie with appropriate options  
     cookieStore.set("authToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -78,7 +93,14 @@ export const LoginAction=async(data:SignInData):Promise<LoginDataResponse>=>{
       path: "/",
       maxAge: 2 * 24 * 60 * 60,
     });
-
+   // set refresh token
+   cookieStore.set("refreshToken",refreshToken,{
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 10 * 24 * 60 * 60,
+   })
     return { success: true, name: user.name, email: user.email };
   } catch (error) {
     console.error("Login failed:", error);
