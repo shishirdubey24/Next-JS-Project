@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
-const { Schema } = mongoose;
-const ProductSchema = new Schema({
+import mongoose, { type Model, Schema } from "mongoose";
+import type { Product } from "@/types/product";
+
+const ProductSchema = new Schema<Product>({
   id: {
     type: String,
     required: true,
@@ -26,6 +27,9 @@ const ProductSchema = new Schema({
   },
 });
 
-const ProductModel =
-  mongoose.models.Products || mongoose.model("Products", ProductSchema);
+// `mongoose.models` is untyped, so retain the model's `Product` generic when
+// reusing the cached model during development.
+const ProductModel: Model<Product> =
+  (mongoose.models.Products as Model<Product> | undefined) ??
+  mongoose.model<Product>("Products", ProductSchema);
 export default ProductModel;

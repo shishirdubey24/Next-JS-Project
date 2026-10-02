@@ -1,9 +1,7 @@
-import BagButton from "./BagButton";
+import AddToCartButton from "./AddToCartButton";
 import { AiFillStar } from "react-icons/ai";
 import Image from "next/image";
-import type { ProductCardProps } from "@/types/productsType";
-
-export type { ProductCardProps } from "@/types/productsType";
+import type { ProductCardProps } from "@/types/product";
 
 const ProductCard = ({ item }: ProductCardProps) => {
   if (!item) {
@@ -43,7 +41,6 @@ const ProductCard = ({ item }: ProductCardProps) => {
             </div>
           )}
         </div>
-
       </div>
 
       {/* Everything below is Server UI */}
@@ -74,7 +71,7 @@ const ProductCard = ({ item }: ProductCardProps) => {
         {/* Interactive button */}
 
         <div className="mt-2">
-          <BagButton itemId={item.id} />
+          <AddToCartButton productId={item.id} />
         </div>
       </div>
     </article>
