@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import type { SignInData } from "@/types/auth";
 //import { useRouter } from "next/navigation";
 import { LoginAction } from "@/lib/actions/authActions";
@@ -92,7 +93,12 @@ const SignInPage = () => {
               {error}
             </p>
           )}
-
+          <Link
+            href="/auth/forgotPassword"
+            className="text-sm font-medium text-[#ff3f6c] hover:underline"
+          >
+            Forgot Password?
+          </Link>
           <button
             type="submit"
             disabled={isSubmitting}
