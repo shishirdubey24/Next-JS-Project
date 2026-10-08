@@ -3,9 +3,11 @@ import type { SignUpData } from "@/types/auth";
 import bcrypt from 'bcryptjs';
 import { generateAuthToken } from "./generateAuthToken";
 import { generateSessionId } from "./generateSessionID";
+import { generateRefreshToken, hashRefreshToken } from "./generateRefreshToekn";
 import UserSession from "@/models/sessionModel";
+import { mongoDBConnect } from "@/lib/mongoDb";
 type SignUpControllerResponse =
-  | { success: true; email: string; name: string; token: string }
+  | { success: true; email: string; name: string; token: string; refreshToken: string }
   | { success: false; message: string };
 
 export const signUpController = async (
@@ -14,6 +16,7 @@ export const signUpController = async (
  
     //1.check for existing 
    try{
+    await mongoDBConnect();
     const ExistingUser =await AuthModel.findOne({email:data.email})
   if (ExistingUser) {
   return {
@@ -27,13 +30,16 @@ const hashedPassword=await bcrypt.hash(Userpassword,10)
    const user=await AuthModel.create({...data,password:hashedPassword})
    
  const sessionID = generateSessionId()
+ const refreshToken=generateRefreshToken();
+     const hashedRefreshToken = hashRefreshToken(refreshToken);
  //store the session data into DB
  await UserSession.create
  ({ 
   sessionID: sessionID,
   userID: user._id.toString(),
+  refreshToken: hashedRefreshToken,
   status: "active",
-  expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), 
+  expiresAt: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
     });
  // token generation
  const token = await generateAuthToken({ 
@@ -41,12 +47,13 @@ const hashedPassword=await bcrypt.hash(Userpassword,10)
   sessionID
 
 })
+
  return {
   success:true,
   email:user.email,
   name:user.name,
   token,
-  
+  refreshToken
  }
    }
    catch(error){
