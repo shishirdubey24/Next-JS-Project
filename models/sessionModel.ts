@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose";
+import mongoose, { type InferSchemaType, type Model, Schema } from "mongoose";
 
 const SessionSchema=new Schema({
     sessionID:{
@@ -29,5 +28,13 @@ const SessionSchema=new Schema({
     },
 
 })
-const UserSession= mongoose.model("Session",SessionSchema)
+type Session = InferSchemaType<typeof SessionSchema>;
+const modelCache = globalThis as typeof globalThis & { sessionModel?: Model<Session> };
+
+const UserSession =
+  modelCache.sessionModel ??
+  (mongoose.models.Session as Model<Session> | undefined) ??
+  mongoose.model<Session>("Session", SessionSchema);
+
+modelCache.sessionModel = UserSession;
 export default UserSession;
