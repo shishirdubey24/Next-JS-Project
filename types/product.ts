@@ -19,6 +19,8 @@ export interface Product {
   } | null;
 }
 
+export type CartProduct = Product & { _id: string };
+
 export interface ProductCardProps {
   item: Product;
 }

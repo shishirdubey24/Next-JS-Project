@@ -2,9 +2,9 @@ import CartModel from "@/models/cartModel";
 import ProductModel from "@/models/productModel";
 import { verifyAuthToken } from "../auth/verifyAuthToken";
 import { mongoDBConnect } from "@/lib/mongoDb";
-import type { Product } from "@/types/product";
+import type { CartProduct } from "@/types/product";
 // product fetching and counting length of the bag items
-export const getBagItems = async (): Promise<Product[]> => {
+export const getBagItems = async (): Promise<CartProduct[]> => {
   await mongoDBConnect();
 
      const userToken=await verifyAuthToken();
@@ -22,6 +22,7 @@ const cart = await CartModel.findOne({ userId }).lean();
     const products = await ProductModel.find({ id: { $in: productIds } }).lean();
     const bagItems=products.map((product)=>({
        ...product,
+         _id: product._id.toString(),
          image: `/productsImage/${product.image}`,
     }))
     return bagItems;
