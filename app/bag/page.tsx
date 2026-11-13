@@ -1,6 +1,7 @@
 import { getBagItems } from "@/lib/data/cartData";
 import Image from "next/image";
 import RemoveFromCartButton from "../ui-cards/RemoveFromCartButton";
+import CheckoutButton from "../ui-cards/CheckoutBtn";
 const CartPage = async () => {
   const bagItems = await getBagItems();
   if (bagItems.length === 0) {
@@ -98,17 +99,11 @@ const CartPage = async () => {
               {" "}
               <span>Total Price</span> <span>₹{totalprice}</span>{" "}
             </div>{" "}
-            <div className="border-t pt-4 flex justify-between font-semibold">
+            <div className="border-t pt-6 flex justify-between font-semibold">
               {" "}
               <span>Total</span> <span>₹{totalprice}</span>{" "}
             </div>{" "}
-            <button
-              type="button"
-              className="w-full mt-6 bg-[#ff3f6c] text-white py-3 text-sm font-semibold rounded-sm"
-            >
-              {" "}
-              PLACE ORDER{" "}
-            </button>{" "}
+            <CheckoutButton />
           </aside>{" "}
         </div>{" "}
       </div>{" "}
