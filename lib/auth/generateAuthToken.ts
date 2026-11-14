@@ -10,7 +10,7 @@ export const generateAuthToken = async (data: {
     const res= await new SignJWT(data)
     .setProtectedHeader({alg:'HS256'})
      .setIssuedAt()
-    .setExpirationTime('2d')
+    .setExpirationTime('5m')
     .sign(SECRET_KEY)
 
     return res

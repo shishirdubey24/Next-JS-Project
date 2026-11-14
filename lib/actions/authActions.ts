@@ -12,7 +12,7 @@ import { mongoDBConnect } from "@/lib/mongoDb";
 import { generateAuthToken } from "@/lib/auth/generateAuthToken";
 import { generateSessionId } from "@/lib/auth/generateSessionID";
 import UserSession from "@/models/sessionModel";
-import { generateRefreshToken, hashRefreshToken } from "../auth/generateRefreshToekn";
+import { generateRefreshToken, hashRefreshToken } from "../auth/generateRefreshToken";
 export type RegisterActionResponse =
   | { success: true; name: string; email: string }
   | { success: false; message: string };
@@ -35,7 +35,7 @@ export const RegisterAction=async (data:SignUpData): Promise<RegisterActionRespo
   secure: process.env.NODE_ENV === "production",
    sameSite: "lax", 
    path: "/",
-    maxAge: 2 * 24 * 60 * 60,
+    maxAge:  5 * 60,
  });
  cookieStore.set("refreshToken",response.refreshToken,{
       httpOnly: true,
@@ -91,7 +91,7 @@ export const LoginAction=async(data:SignInData):Promise<LoginDataResponse>=>{
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 2 * 24 * 60 * 60,
+      maxAge:  5 * 60,
     });
    // set refresh token
    cookieStore.set("refreshToken",refreshToken,{
