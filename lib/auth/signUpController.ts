@@ -3,7 +3,7 @@ import type { SignUpData } from "@/types/auth";
 import bcrypt from 'bcryptjs';
 import { generateAuthToken } from "./generateAuthToken";
 import { generateSessionId } from "./generateSessionID";
-import { generateRefreshToken, hashRefreshToken } from "./generateRefreshToekn";
+import { generateRefreshToken, hashRefreshToken } from "./generateRefreshToken";
 import UserSession from "@/models/sessionModel";
 import { mongoDBConnect } from "@/lib/mongoDb";
 type SignUpControllerResponse =

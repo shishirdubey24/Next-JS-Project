@@ -48,7 +48,11 @@ export async function deleteFromCart(productId: string) {
   await mongoDBConnect();
    const userToken=await verifyAuthToken();
   if(!userToken){
-    return null;
+    return {
+    success: false,
+    code: "UNAUTHENTICATED",
+    message: "Please sign in",
+  };
   }
   const{userId}=userToken;
   const cart = await CartItemModel.findOne({ userId });

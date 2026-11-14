@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { jwtVerify, errors } from "jose";
 import UserSession from "@/models/sessionModel";
 import { mongoDBConnect } from "@/lib/mongoDb";
-import { verifyRefreshToken } from "./verifyRefreshToekn";
+//import { verifyRefreshToken } from "./verifyRefreshToekn";
 const SECRET_KEY = new TextEncoder().encode(
   process.env.JWT_SECRET
 );
@@ -13,7 +13,8 @@ export const verifyAuthToken = async (): Promise<AuthTokenPayload | null> => {
   const token = cookieStore.get("authToken")?.value;
 
   if (!token) {
-    return await verifyRefreshToken();
+    //return await verifyRefreshToken();
+   return null; 
   }
 
   try {
@@ -46,9 +47,9 @@ export const verifyAuthToken = async (): Promise<AuthTokenPayload | null> => {
     };
   } catch (error) {
     // Refresh only when the access token has expired.
-    if (error instanceof errors.JWTExpired) {
-      return await verifyRefreshToken();
-    }
+    // if (error instanceof errors.JWTExpired) {
+    //   return await verifyRefreshToken();
+    // }
 
     // Reject malformed or invalidly signed tokens.
     console.error("Error verifying auth token:", error);
